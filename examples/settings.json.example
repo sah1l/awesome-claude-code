@@ -1,0 +1,79 @@
+// .claude/settings.json — Annotated Example
+// NOTE: JSON doesn't support comments. This file is for documentation only.
+// Copy the actual JSON below (without comments) to your .claude/settings.json.
+//
+// WHY settings.json: This file configures Claude Code's behavior for your project.
+// It lives in .claude/ and is committed to git (shared with team).
+// Personal overrides go in .claude/settings.local.json (gitignored).
+
+{
+  // ── Hooks ─────────────────────────────────────────────────
+  // WHY: Hooks automate repetitive tasks and enforce guardrails.
+  // They run shell commands in response to Claude Code events.
+
+  "hooks": {
+    // PreToolUse: Runs BEFORE a tool executes. Non-zero exit = block the action.
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        // WHY: Prevents catastrophic commands (rm -rf /, force-push to main)
+        "hooks": ["bash hooks/pre-commit-guard/guard.sh"]
+      }
+    ],
+
+    // PostToolUse: Runs AFTER a tool executes. Used for formatting, logging.
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        // WHY: Auto-formats files to match project style after every edit
+        "hooks": ["bash hooks/auto-format/format.sh"]
+      }
+    ]
+
+    // Stop: Runs when Claude finishes its response.
+    // Useful for: summary logging, cleanup tasks.
+
+    // PermissionRequest: Runs when Claude asks for user permission.
+    // Useful for: audit logging, custom alerting.
+
+    // TIP: For desktop notifications, use Claude Code's built-in support
+    // via /config — no custom hook needed.
+  },
+
+  // ── Permissions ───────────────────────────────────────────
+  // WHY: Control what Claude can do without asking.
+  // Balance between autonomy (fast) and safety (controlled).
+
+  "permissions": {
+    // Tools that Claude can use without asking
+    "allow": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Bash(npm test *)",
+      "Bash(npm run lint *)",
+      "Bash(npm run build)",
+      "Bash(git status)",
+      "Bash(git diff *)",
+      "Bash(git log *)"
+    ],
+    // Tools that always require permission
+    "deny": [
+      "Bash(rm -rf *)",
+      "Bash(git push *)",
+      "Bash(git reset --hard *)",
+      "Bash(npm publish *)"
+    ]
+  },
+
+  // ── Environment Variables ─────────────────────────────────
+  // WHY: Pass project-specific config to Claude's environment.
+
+  "env": {
+    "NODE_ENV": "development",
+    "LOG_LEVEL": "debug"
+  }
+}
+
+// To get a clean JSON version without comments, see .claude/settings.json
+// in this repo for a working example you can copy directly.

@@ -1,0 +1,97 @@
+# CLAUDE.md Example — Full-Stack SaaS Application
+
+# This is an annotated example of a CLAUDE.md file for a hypothetical
+# full-stack SaaS app. Comments explain WHY each instruction exists.
+
+# ============================================================
+# PROJECT CONTEXT
+# ============================================================
+# WHY: Claude starts every session fresh. This section gives it
+# the minimum context to understand your project immediately.
+
+## Project Overview
+TaskFlow is a B2B project management SaaS. TypeScript monorepo with a
+Next.js frontend, Express API, and PostgreSQL database via Drizzle ORM.
+
+## Tech Stack
+- **Frontend**: Next.js 15 (App Router), React 19, Tailwind CSS, shadcn/ui
+- **API**: Express 4, TypeScript, Zod validation
+- **Database**: PostgreSQL 16, Drizzle ORM, Redis for caching
+- **Testing**: Vitest (unit/integration), Playwright (E2E)
+- **CI/CD**: GitHub Actions → AWS ECS
+
+# ============================================================
+# ARCHITECTURE
+# ============================================================
+# WHY: Claude needs to know WHERE things go. Without this,
+# it'll put new files in random locations.
+
+## Monorepo Structure
+```
+apps/
+  web/           # Next.js frontend
+  api/           # Express backend
+packages/
+  db/            # Drizzle schema, migrations, repositories
+  shared/        # Shared types, utils, constants
+  ui/            # Shared React components (shadcn/ui based)
+```
+
+## Key Patterns
+- **Repository pattern** for database access (packages/db/src/repositories/)
+- **Service layer** for business logic (apps/api/src/services/)
+- **Controller layer** for HTTP handling (apps/api/src/controllers/)
+- **Zod schemas** for validation at API boundaries (apps/api/src/schemas/)
+- **Server Components by default** — only add "use client" when needed
+
+# ============================================================
+# CODING CONVENTIONS
+# ============================================================
+# WHY: These prevent the most common Claude mistakes in this codebase.
+# Each rule exists because Claude violated it at least twice.
+
+## Rules
+- Use `pnpm` — never npm or yarn
+- Import from `@taskflow/db`, `@taskflow/shared`, `@taskflow/ui` — never relative paths across packages
+- All API responses use the format: `{ data: T }` or `{ error: { code, message, details? } }`
+- Use Drizzle's query builder — never raw SQL unless for complex reports
+- Tests go next to the file: `user-service.ts` → `user-service.test.ts`
+- Use `vi.mock()` for external dependencies, real implementations for internal code
+- All dates in UTC, format with `date-fns` — never `new Date().toLocaleDateString()`
+
+## Naming
+- Files: `kebab-case.ts`
+- React components: `PascalCase.tsx`
+- Database tables: `snake_case` (Drizzle convention)
+- API routes: `kebab-case` (`/api/v1/project-members`)
+- Environment variables: `UPPER_SNAKE_CASE`
+
+# ============================================================
+# COMMANDS
+# ============================================================
+# WHY: Claude should know how to build, test, and run the project.
+
+## Development
+```bash
+pnpm dev                    # Start all apps in dev mode
+pnpm build                  # Build all packages and apps
+pnpm test                   # Run all tests
+pnpm test:e2e               # Run Playwright E2E tests
+pnpm lint                   # Lint all packages
+pnpm db:generate            # Generate Drizzle migrations
+pnpm db:migrate             # Apply pending migrations
+```
+
+# ============================================================
+# WHAT NOT TO DO
+# ============================================================
+# WHY: Negative instructions prevent Claude's most costly mistakes.
+# These save more time than positive instructions.
+
+## Avoid
+- Do NOT use `any` type — use `unknown` and narrow, or define a proper type
+- Do NOT add `console.log` for debugging — use the structured logger (`@taskflow/shared/logger`)
+- Do NOT commit `.env` files — use `.env.example` as a template
+- Do NOT install new dependencies without asking — we're strict about bundle size
+- Do NOT modify migration files after they've been applied — create new migrations
+- Do NOT use `useEffect` for data fetching — use Server Components or React Query

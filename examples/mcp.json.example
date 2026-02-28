@@ -1,0 +1,149 @@
+# MCP Server Configuration Examples
+
+## What Is MCP?
+
+MCP (Model Context Protocol) extends Claude Code with external tool integrations — databases, APIs, cloud services, and more. Each MCP server provides tools that Claude can use alongside its built-in capabilities.
+
+MCP config goes in `.claude/mcp.json` (project-level) or `~/.claude/mcp.json` (global).
+
+## Configuration Format
+
+```json
+{
+  "mcpServers": {
+    "server-name": {
+      "command": "npx",
+      "args": ["-y", "@package/mcp-server"],
+      "env": {
+        "API_KEY": "..."
+      }
+    }
+  }
+}
+```
+
+## Example: GitHub Integration
+
+```json
+{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "<your-token>"
+      }
+    }
+  }
+}
+```
+
+**What it enables:**
+- Create/read/update issues and PRs
+- Search repositories
+- Read file contents from any repo
+- Manage labels, milestones, and projects
+
+**Use case:** "Create a GitHub issue for the bug we just found" — Claude creates the issue directly.
+
+## Example: PostgreSQL Database
+
+```json
+{
+  "mcpServers": {
+    "postgres": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres"],
+      "env": {
+        "POSTGRES_CONNECTION_STRING": "postgresql://user:pass@localhost:5432/mydb"
+      }
+    }
+  }
+}
+```
+
+**What it enables:**
+- Run read-only SQL queries
+- Inspect schema (tables, columns, indexes)
+- Analyze query performance
+
+**Use case:** "Show me the top 10 users by order count" — Claude queries the database directly.
+
+## Example: Slack
+
+```json
+{
+  "mcpServers": {
+    "slack": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/slack-mcp"],
+      "env": {
+        "SLACK_BOT_TOKEN": "xoxb-...",
+        "SLACK_TEAM_ID": "T01234567"
+      }
+    }
+  }
+}
+```
+
+**What it enables:**
+- Read channel messages
+- Post messages and updates
+- Search conversation history
+
+**Use case:** "Summarize what the #backend channel discussed today" — Claude reads and summarizes.
+
+## Example: Filesystem (Extended Access)
+
+```json
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/path/to/allowed/directory"]
+    }
+  }
+}
+```
+
+**What it enables:**
+- Read/write files outside the current project
+- Access shared configuration directories
+- Work with monorepo siblings
+
+## Example: Brave Search
+
+```json
+{
+  "mcpServers": {
+    "brave-search": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/brave-search-mcp"],
+      "env": {
+        "BRAVE_API_KEY": "<your-key>"
+      }
+    }
+  }
+}
+```
+
+**What it enables:**
+- Web search from within Claude Code
+- Research documentation, Stack Overflow, blog posts
+- Find up-to-date information beyond Claude's training data
+
+## Security Notes
+
+- **Never commit secrets** — store MCP env vars in `.claude/mcp.local.json` (gitignored) or use environment variables
+- **Principle of least privilege** — only enable the MCP servers you need
+- **Read-only where possible** — prefer read-only database connections
+- **Review MCP server permissions** — understand what each server can do before enabling it
+
+## Combining MCP with Skills
+
+MCP servers provide the *tools* (data access), while skills provide the *methodology* (how to use the data). Example:
+
+- **MCP**: PostgreSQL server gives Claude the ability to query the database
+- **Skill**: `log-analyzer` skill teaches Claude HOW to investigate production issues using those queries
+
+This separation means you can swap MCP servers (CloudWatch → Datadog) without rewriting your skills.

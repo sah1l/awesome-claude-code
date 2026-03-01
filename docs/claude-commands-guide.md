@@ -102,10 +102,11 @@ Claude Code can interact with browsers for visual workflows:
 ### Resume Old Conversations
 You can resume previous Claude Code conversations:
 
-```bash
-claude --resume           # Resume the last conversation
-claude --resume <id>      # Resume a specific conversation
 ```
+/resume                   # Browse previous conversations and pick one to resume
+```
+
+You can also use `claude --resume` or `claude --resume <id>` from the terminal if you know the conversation ID.
 
 **When to use**:
 - Continue work from yesterday
@@ -136,9 +137,12 @@ See [the commands directory](../.claude/commands/) for examples.
 |----------|--------|
 | `Ctrl+C` | Cancel current generation |
 | `Ctrl+B` | Send current task to background |
+| `Ctrl+S` | Stash/restore current input |
 | `Ctrl+D` | Exit Claude Code |
 | `Up/Down` | Navigate command history |
 | `Tab` | Autocomplete file paths and commands |
 
 **`Ctrl+B` — Background Tasks**: Start a long task, press Ctrl+B to send it to the background, and continue working. You'll be notified when it completes.
+
+**`Ctrl+S` — Stash Input**: Halfway through typing a prompt and need to do something else? Press Ctrl+S to stash your current input, handle the interruption, then press Ctrl+S again to restore it.
 

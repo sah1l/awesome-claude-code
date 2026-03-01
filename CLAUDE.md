@@ -91,19 +91,19 @@ Plus 6 additional optional hooks in `hooks/` (`auto-lint`, `auto-test`, `block-l
 Claude Code has three tiers of instructions — understanding when to use each is the key to an effective setup.
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│  CLAUDE.md          Always loaded            │
-│  Project context, hard rules, build commands │
-│  Target: <150 lines                          │
-├─────────────────────────────────────────────────────────────────┤
-│  Skills              Loaded on demand        │
-│  Standards, checklists, domain knowledge     │
-│  Only loaded when relevant                   │
-├─────────────────────────────────────────────────────────────────┤
-│  Agents              Loaded when invoked     │
-│  Specialized workflows with defined tools    │
-│  Complete task definitions with output format │
-└─────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────┐
+│  CLAUDE.md          Always loaded                │
+│  Project context, hard rules, build commands     │
+│  Target: <150 lines                              │
+├──────────────────────────────────────────────────┤
+│  Skills              Loaded on demand            │
+│  Standards, checklists, domain knowledge         │
+│  Only loaded when relevant                       │
+├──────────────────────────────────────────────────┤
+│  Agents              Loaded when invoked         │
+│  Specialized workflows with defined tools        │
+│  Complete task definitions with output format    │
+└──────────────────────────────────────────────────┘
 ```
 
 The common mistake: Putting everything in CLAUDE.md. This wastes context on every message. Move detailed standards to skills — they load only when needed.
@@ -121,9 +121,10 @@ Read more: [Why Skills, Not CLAUDE.md](docs/why-skills-not-claude-md.md)
 | `/insights` | Get workflow improvement suggestions | After a week of usage |
 | `/fork` | Branch the current session | Before risky experiments |
 | `/add-dir` | Work across multiple repos | Cross-repo changes |
-| `/new` | Fresh conversation | Between unrelated tasks |
+| `/clear` | Fresh conversation (aliases: `/new`, `/reset`) | Between unrelated tasks |
 | `Ctrl+B` | Send task to background | Long-running builds/tests |
-| `--resume` | Continue previous session | Multi-day features |
+| `Ctrl+S` | Stash current input, restore with `Ctrl+S` again | Quick interruption mid-prompt |
+| `/resume` | Browse and continue a previous session | Multi-day features |
 
 ## Top 10 Tips
 

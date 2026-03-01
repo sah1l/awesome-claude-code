@@ -27,19 +27,20 @@ Quick-reference tips. For detailed explanations of commands, see the [commands g
 
 13. **`$ARGUMENTS` in skills** — skills receive arguments dynamically: `/commit add email verification` passes the description to the commit skill
 14. **`Ctrl+B` to background tasks** — start a long build/test, press Ctrl+B, keep working; you'll get notified when it completes
-15. **Worktrees for parallel features** — use `/worktree` if available in your version, otherwise use `git worktree add`; run two Claude sessions on different branches simultaneously
-16. **Agent teams for parallel review** — launch 3 review agents (style, logic, architecture) simultaneously for better coverage than one sequential review
-17. **MCP servers extend Claude** — GitHub, Slack, database, log queries — all without leaving the terminal. See [mcp.json.example](../examples/mcp.json.example)
+15. **`Ctrl+S` to stash input** — halfway through typing a prompt and need to do something else? Press Ctrl+S to stash it, handle the interruption, then Ctrl+S again to restore
+16. **Worktrees for parallel features** — use `claude --worktree feature-name` (or `-w`) to create an isolated worktree in `.claude/worktrees/`; run two Claude sessions on different branches simultaneously
+17. **Agent teams for parallel review** — launch 3 review agents (style, logic, architecture) simultaneously for better coverage than one sequential review
+18. **MCP servers extend Claude** — GitHub, Slack, database, log queries — all without leaving the terminal. See [mcp.json.example](../examples/mcp.json.example)
 
 ## Configuration
 
-18. **Explore `/config` thoroughly** — model selection, output mode, notifications, theme, permissions — most users only scratch the surface
-19. **Notifications are built-in** — use `/config` to enable desktop notifications when tasks complete; no custom hook needed
-20. **Auto-memory persists learnings** — Claude remembers project-specific patterns across sessions
-21. **Custom slash commands are your superpower** — create `.claude/commands/<name>.md` for repeated workflows; every team should have at least a PR review and an onboarding command
+19. **Explore `/config` thoroughly** — model selection, output mode, notifications, theme, permissions — most users only scratch the surface
+20. **Notifications are built-in** — use `/config` to enable desktop notifications when tasks complete; no custom hook needed
+21. **Auto-memory persists learnings** — Claude remembers project-specific patterns across sessions
+22. **Custom slash commands are your superpower** — create `.claude/commands/<name>.md` for repeated workflows; every team should have at least a PR review and an onboarding command
 
 ## Workflow Patterns
 
-22. **Start every feature with `/plan`** — 5 min planning saves 30 min rework; Claude explores the codebase and proposes an approach before writing code
-23. **Debugger's 6-step process** — don't say "fix this bug"; instead: reproduce → isolate → identify root cause → fix → verify → check for similar patterns
-24. **Commit early, squash at merge** — let Claude commit frequently on feature branches; squash merge to main for clean history
+23. **Start every feature with `/plan`** — 5 min planning saves 30 min rework; Claude explores the codebase and proposes an approach before writing code
+24. **Debugger's 6-step process** — don't say "fix this bug"; instead: reproduce → isolate → identify root cause → fix → verify → check for similar patterns
+25. **Commit early, squash at merge** — let Claude commit frequently on feature branches; squash merge to main for clean history
